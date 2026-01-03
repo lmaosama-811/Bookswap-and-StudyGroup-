@@ -1,37 +1,18 @@
-# ======================
-# Environment variables
-# ======================
-.env
-.env.*
-!.env.example
-
-# ======================
-# Python virtual env
-# ======================
-.venv/
+# Virtual environment
 venv/
-ENV/
+.venv/
 
-# ======================
 # Python cache
-# ======================
 __pycache__/
-*.py[cod]
-*.pyo
+*.pyc
 
-# ======================
-# FastAPI / Uvicorn
-# ======================
-*.log
+# Environment variables
+.env
 
-# ======================
-# OS
-# ======================
-.DS_Store
-Thumbs.db
-
-# ======================
-# Editor
-# ======================
+# IDEs
 .vscode/
 .idea/
+
+# OS
+.DS_Store
+Thumbs.db
