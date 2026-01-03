@@ -55,6 +55,15 @@ create table if not exists notifications(
 	message text
 );
 
+create table if not exists Accounts(
+	user_id int primary key references users(id) on delete cascade,
+	username text not null,
+	password text not null unique
+);
+insert into Accounts(user_id,username,password)
+values (1,'alice','$2b$12$DEdAJA.0GnwYSeBGABqUlea/WPu7GUpiJIJ97uZy2J7JitcIXECPa'),
+		(2,'bob','$2b$12$vaHomAA06SeZWPVKOqGvk.hQbstzly.h86Mxz78mWL.g/FL0efbty'),
+		(12,'admin','$2b$12$1St7tavFW3omL5MEZdmx.ejGYYAe.R3xovyEkDdDKEEFVEaZFrH/W');
 
 --Sample data ( em bảo chat tạo)
 -- Users
@@ -98,5 +107,8 @@ INSERT INTO study_group_members (group_id, user_id) VALUES
 (2, 2),
 (2, 3);
 
-
+CREATE INDEX idx_books_owner_id ON books(owner_id);
+CREATE INDEX idx_listings_status ON listings(status);
+CREATE INDEX idx_swap_requests_listings_id ON swap_requests(listing_id);
+CREATE INDEX idx_swap_requests_requester_id ON swap_requests(requester_id);
 

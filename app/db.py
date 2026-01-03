@@ -1,11 +1,18 @@
 from sqlmodel import create_engine, Session
+from pydantic_settings import BaseSettings
 
-database_url = "postgresql+psycopg://postgres:ghasdfgh.09.za@localhost:8117/Bookswap"
+class Settings(BaseSettings):
+    database_url:str
+    secret_key:str  
+    class Config:
+        env_file =".env"
+settings = Settings()
 
 engine = create_engine(
-    database_url,
+    settings.database_url,
     echo = True
 )
+
 
 def get_session():
     with Session(engine) as session:

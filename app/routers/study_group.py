@@ -1,36 +1,41 @@
-from fastapi import APIRouter,Depends,Path,Query
+from fastapi import APIRouter,Depends,Path
 from sqlmodel import Session 
-from typing import Annotated, Literal, Union 
+from typing import Annotated, Literal
 
-from ..models import Group
+from ..models import GroupBase, SuccessResponse
 from ..db import get_session 
-from ..respositories import create_group_sql,fetch_group_sql,join_group_sql,leave_group_sql
+from ..repository import GroupRepository
+from ..auth.security import get_current_user
 
 router = APIRouter(prefix ="/groups",
                    tags=['Study groups'])
 
-@router.post("")
-async def create_group(group:Group, db:Session= Depends(get_session)):
-    result = create_group_sql(group,db)
-    return result 
+group_repo=GroupRepository()
 
-@router.get("",response_model = list[Group])
-async def fetch_group(filter:Literal["topic","title"],
+@router.post("",response_model =SuccessResponse)
+def create_group(group:GroupBase, db:Session= Depends(get_session)):
+    group_repo.create_group_sql(group,db)
+    return SuccessResponse(message="Created successfully")
+
+
+@router.get("",response_model = list[GroupBase])
+def get_group(filter:Literal["topic","title"],
                       request: str,
                       db:Session = Depends(get_session)):
-    result = fetch_group_sql(filter,request,db)
-    return result 
+    return group_repo.get_group_sql(filter,request,db)
+    
 
-@router.post("/{group_id}/join")
-async def join_group(group_id:Annotated[int,Path()],
-                     user_id: int,
+@router.post("/{group_id}/join",response_model = SuccessResponse)
+def join_group(group_id:Annotated[int,Path()],
+                     user_id: int = Depends(get_current_user),
                      db:Session = Depends(get_session)):
-    result = join_group_sql(group_id,user_id,db)
-    return result 
+    group_repo.join_group_sql(group_id,user_id,db)
+    return SuccessResponse(message="You have joined this group successfully")
 
-@router.post("/{group_id}/leave")
-async def leave_group(group_id:Annotated[int,Path()],
-                     user_id: int,
+
+@router.post("/{group_id}/leave",response_model =SuccessResponse)
+def leave_group(group_id:Annotated[int,Path()],
+                     user_id: int = Depends(get_current_user),
                      db:Session = Depends(get_session)):
-    result = leave_group_sql(group_id,user_id,db)
-    return result 
+    group_repo.leave_group_sql(group_id,user_id,db)
+    return SuccessResponse(message="You have left group successfully!")
