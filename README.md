@@ -2,8 +2,14 @@
 A system for manage borrowing book process and group studying
 
 ## Requirement  
-pip install fastapi[all]  
-pip install sqlmodel psycopg[binary]  
+fastapi[all]  
+sqlmodel psycopg[binary]  
+python-jose[cryptography]  
+bcrypt==3.2.0  
+
+## Các cải tiến  
+Tăng cường bảo mật  
+Tối ưu, code gọn hơn  
 
 ## Chức năng cơ bản:
 + Tạo và tìm kiếm người dùng
